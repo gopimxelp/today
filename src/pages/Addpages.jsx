@@ -1,24 +1,20 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Addpages.css";
-import Table from "react-bootstrap/Table";
+
 
 import React from "react";
 
-import { useRef } from "react";
+
 import JoditEditor from "jodit-react";
 
 import { AiOutlineEye, AiOutlinePlusCircle } from "react-icons/ai";
 
 import parse from "html-react-parser";
 
-import Popup from "reactjs-popup";
+
 
 const Dashboard = () => {
-  const editor = useRef(null);
-
-  const [show, setShow] = useState(true);
-
   const [content, setContent] = useState("");
 
   const [validation] = useState(false);
@@ -39,6 +35,10 @@ const Dashboard = () => {
   const [data, setData] = useState({
     id: "",
     title: "",
+    subtitle: "",
+    content: "",
+  });
+  const [data2, setData2] = useState({
     subtitle: "",
     content: "",
   });
@@ -67,11 +67,12 @@ const Dashboard = () => {
     });
   };
   const handleChange2 = (e) => {
-    setData({
-      ...data,
+    setData2({
+      ...data2,
       [e.target.name]: e.target.value,
     });
   };
+  console.log(data2,"2data i'm data2")
 
   const contentValue = (enteredContent) => {
     if (enteredContent.length !== 0) {
@@ -116,7 +117,6 @@ const Dashboard = () => {
           subtitlename: data.subtitle,
           content: data.content,
         },
-       
       ],
     };
 
@@ -220,7 +220,7 @@ const Dashboard = () => {
   };
 
   let newContentsList = [];
-  const contents =
+  
     usersList &&
     usersList?.map((each) =>
       each.subtitle?.map((item) => {
@@ -230,15 +230,15 @@ const Dashboard = () => {
 
   // console.log(newContentsList, "newContentsListlkvmmmmmmmmmmmmmmmmmmmskdnvlksdgggggg")
 
-  const htmlFromCMS = newContentsList;
+  // const htmlFromCMS = newContentsList;
   // console.log(htmlFromCMS,"i am cms .........................")
 
-  const preview = (e) => {
-    window.alert(htmlFromCMS, "data");
-    const a = parse(htmlFromCMS);
+  // const preview = (e) => {
+  //   window.alert(htmlFromCMS, "data");
+  //   const a = parse(htmlFromCMS);
 
-    console.log(a, " i am parse data");
-  };
+  //   console.log(a, " i am parse data");
+  // };
 
   return (
     <div>
@@ -355,7 +355,7 @@ const Dashboard = () => {
                           </div>
                           <input
                             value={data.subtitle}
-                            name="subtitle"
+                            name="subtitle2"
                             onChange={handleChange2}
                             className="form-control"
                           />
@@ -484,17 +484,6 @@ const Dashboard = () => {
         </div>
       </div>
       <div />
-
-      {/* <div>
-                <Popup onClick={()=> setShow(!show)} trigger=
-                    {<button class="bg-green-500 text-white rounded-full w-24" > Show All Data
-                        </button>}
-                    position="center center">
-                    <div class="mt-[100%]"><Link to="/addpages" target="_parent" className="btn btn-danger w-20 mx-5">Back</Link><div class="border-2 border-red-400 " dangerouslySetInnerHTML={{__html: htmlFromCMS}} >
-                        </div></div>
-                    
-                </Popup>
-            </div> */}
     </div>
   );
 };

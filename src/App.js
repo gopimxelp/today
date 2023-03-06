@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Addpages from "./pages/Addpages";
 import User from "./pages/User";
 import Navbar from "./components/Navbar";
+
 import  {connect} from 'react-redux';
 import { IncAction } from "./actions";
 import { DecAction } from "./actions";
