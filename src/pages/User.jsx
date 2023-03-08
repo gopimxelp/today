@@ -326,7 +326,7 @@ import parse from "html-react-parser";
 const User = () => {
   const [content, setContent] = useState("");
 
-  const [newdis, setNewdis] = useState(false);
+  const [counter, setCounter] = useState(null);
 
   const [validation] = useState(false);
 
@@ -334,19 +334,13 @@ const User = () => {
 
   const [usersList, setUsersList] = useState([]);
 
-  // const [subtitleList, setSubtitleList] = useState([]);
-
   const [addSubtitle, setAddSubTitle] = useState(false);
 
   const [inputdisable, setInputDisable] = useState(false);
 
-  const [contentDisable, setContentDisable] = useState(false);
-
-
-
   const onSubmit = (items) => {
     setContent(items);
-    console.log(content,'2123323 i am content')
+    
   };
   
 
@@ -357,27 +351,6 @@ const User = () => {
     subtitle: "",
     content: "",
   });
-  // const [data2, setData2] = useState({
-  //   subtitle: "",
-  //   content: "",
-  // });
-
-  // const addSubtitle=(e)=>{
-
-  //     const userDetailsObj2 = {
-
-  //       subtitles:[{
-
-  //           subtitlename:  data.subtitle,
-  //           content: data.content
-
-  //       }]
-
-  //     }
-
-  //     console.log(e,userDetailsObj2,"today i,m object2")
-
-  //   }
 
   const handleChange = (e) => {
     setData({
@@ -385,64 +358,60 @@ const User = () => {
       [e.target.name]: e.target.value,
     });
   };
-  // const handleChange2 = (e) => {
-  //   setData2({
-  //     ...data2,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
-  // console.log(data2, "2data i'm data2");
 
-  const contentValue = (enteredContent) => {
-    if (enteredContent.length !== 0) {
-      setData({
-        ...data,
-        content: enteredContent,
-      });
+  console.log(data,'i amdata')
+  
+
+  const [finalArray, setFinalArray] = useState([]);
+
+  const addSubtitleButtonClicked = (event) => {
+    event.stopPropagation();
+
+    setCounter(0);
+
+    if (
+      data &&
+      data.subtitle.length > 0 &&
+      (data.subtitle !== " " || data.subtitle !== "")
+    ) {
+      setInputDisable(true);
     }
   };
 
-  //    console.log(data, "iam dataaaaaaaaaaaaaaaaaaaaaaaaaaa")
-
-  //    console.log(usersList,"i kknjkjksnfajknsjkdgggggggggggggggggggggggggggggggggggggggggggggggggg userlist")
-
-  // console.log(subtitleList, "iam subtitlteList");
-
-
-
-  const addSubtitleButtonClicked = (event) => {
-
-        event.stopPropagation()
-
-        if(data && data.subtitle.length > 0){
-
-          setInputDisable(true)
-
-
-        }
-
-        console.log("hello world")
-  }
-
   const addContentButtonClicked = (event) => {
+    event.stopPropagation();
 
-    event.stopPropagation()
+    setCounter(1);
 
+    if (data && data.content.length > 0) {
+      setInputDisable(false);
 
+      setFinalArray([
+        ...finalArray,
+        {
+          subtitlename: data.subtitle,
+          content: data.content,
+        },
+      ]);
 
-console.log(event)
-
-    if(data && data.content.length > 0){
-
-      setContentDisable(true)
-
-
+      setData({
+        ...data,
+        subtitle: "",
+        content: "",
+      });
     }
 
+    if (counter == 1) {
+      setData({
+        ...data,
+        subtitle: "",
+        content: "",
+      });
+    }
+  };
+  console.log(finalArray, "i am final array");
 
-  }
-
-
+  console.log(counter, "i am counter value");
 
   const handlesubmit = (e) => {
     e.preventDefault();
@@ -456,11 +425,13 @@ console.log(event)
         {
           subtitlename: data.subtitle,
           content: data.content,
+          ...finalArray,
         },
       ],
     };
 
     setarr([...arr, userDetailsObj]);
+    console.log(userDetailsObj, "object details");
 
     /*>>>>>>>>>>>>>>>>>>>>>>>   API CALL TO ADD CONTENT  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
@@ -515,8 +486,6 @@ console.log(event)
     getAPICALL();
   }, []);
 
-  console.log(usersList, "iam uderslist");
-
   // const handleedit = (e) => {
   //   e.preventDefault();
 
@@ -568,19 +537,7 @@ console.log(event)
       })
     );
 
-  console.log(inputdisable, "input disable value");
-
-  // console.log(newContentsList, "newContentsListlkvmmmmmmmmmmmmmmmmmmmskdnvlksdgggggg")
-
-  // const htmlFromCMS = newContentsList;
-  // console.log(htmlFromCMS,"i am cms .........................")
-
-  // const preview = (e) => {
-  //   window.alert(htmlFromCMS, "data");
-  //   const a = parse(htmlFromCMS);
-
-  //   console.log(a, " i am parse data");
-  // };
+  
 
   return (
     <div>
@@ -635,137 +592,71 @@ console.log(event)
                     </button>
                   </div>
 
-                  {/* <div className="col-lg-12">
-                    <div className="form-group">
-                      <div className="flex flex-row justify-between align-items-center mr-3">
-                        <label class="flex">Sub Title </label>
-                        <span class="">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setAddSubTitle(true);
-                            }}
-                          >
-                            {<AiOutlinePlusCircle />}
-                          </button>
-                        </span>
-                      </div>
-                      <input
-                        value={data.subtitle}
-                        name="subtitle"
-                        onChange={handleChange}
-                        className="form-control"
-                      />
-                    </div>
-                  </div> */}
-
-                  {/* <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Content</label>
-                                            <input value={data.content} name="content" onChange={handleChange} className="form-control"></input>
-                                        </div>
-                                     </div>  */}
-
-                  {/* <br />
-                  <br />
-                  <br /> */}
-                  {/* 
-                  <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Section</label>
-                                            <input value={data.section} name="section" onChange={handleChange} className="form-control"></input>
-                                        </div>
-                                     </div> */}
-
-                  {/* <div>
-                    <div className="App">
-                      <label>Content</label>
-
-                      <div>
-                        <JoditEditor
-                          class="text-start content-start h-[100vh]"
-                          onChange={(event) => {
-                            console.log(event, "iam event");
-
-                            contentValue(event);
-                          }}
+                  <>
+                    <div className="col-lg-12" disabled={inputdisable === true}>
+                      <div className="form-group">
+                        <div className="flex flex-row justify-between align-items-center mr-3">
+                          <label class="flex">Sub Title </label>
+                        </div>
+                        <input
+                          disabled={inputdisable === true}
+                          value={data.subtitle}
+                          name="subtitle"
+                          onChange={handleChange}
+                          className="form-control"
                         />
                       </div>
                     </div>
-                  </div> */}
 
-   
-                    <>
+                    <br />
+                    <br />
 
-                      <div className="col-lg-12" disabled = {inputdisable === true}>
-                        <div className="form-group">
-                          <div className="flex flex-row justify-between align-items-center mr-3">
-                            <label class="flex">Sub Title </label>
-                          </div>
-                          <input
-                            disabled = {inputdisable === true}
-                            value={data.subtitle}
-                            name="subtitle"
-                            onChange={handleChange}
-                            className="form-control"
+                    <button
+                      class="flex flex-start bg-orange-400 w-40 h-8 text-center rounded my-2"
+                      type="button"
+                      onChange={handleChange}
+                      onClick={addSubtitleButtonClicked}
+                    >
+                      Add Subtitle
+                    </button>
+
+                    <br />
+                    <br />
+
+                    <div>
+                      <div className="App">
+                        <label>Content</label>
+
+                        <div>
+                          <JoditEditor
+                            disabled={true}
+                            setReadonly={true}
+                            class="text-start content-start h-[100vh]"
+                            value={data.content}
+                            onChange={(event) => {
+                              console.log(event, "iam event");
+
+                              setData({
+                                ...data,
+                                content: event,
+                              });
+                            }}
                           />
                         </div>
                       </div>
+                    </div>
 
-                      <br />
-                      <br />
+                    <br />
+                    <br />
 
-                      <button
-                        class="flex flex-start bg-orange-400 w-40 h-8 text-center rounded my-2" type = "button" 
-                        onClick={addSubtitleButtonClicked}
-                      >
-                        Add Subtitle
-                      </button>
-
-                      {/* <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Content</label>
-                                            <input value={data.content} name="content" onChange={handleChange} className="form-control"></input>
-                                        </div>
-                                     </div> */}
-
-                      <br />
-                      <br />
-
-                      {/* <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Section</label>
-                                            <input value={data.section} name="section" onChange={handleChange} className="form-control"></input>
-                                        </div>
-                                     </div> */}
-
-                      <div>
-                        <div className="App">
-                          <label>Content</label>
-
-                          <div>
-                            <JoditEditor
-                              disabled={true}
-                              setReadonly={true}
-                              class="text-start content-start h-[100vh]"
-                              onChange={(event) => {
-                                console.log(event, "iam event");
-
-                                contentValue(event);
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <br />
-                      <br />
-
-                      <button class="flex flex-start bg-orange-400 w-40 h-8 text-center rounded my-2" type = "button" onClick = {addContentButtonClicked}>
-                        Add Content
-                      </button>
-                    </>
-    
+                    <button
+                      class="flex flex-start bg-orange-400 w-40 h-8 text-center rounded my-2"
+                      type="button"
+                      onClick={addContentButtonClicked}
+                    >
+                      Add Content
+                    </button>
+                  </>
 
                   <div className="col-lg-12 my-2">
                     <div className="form-group">
@@ -790,19 +681,6 @@ console.log(event)
             </div>
           </form>
         </div>
-        <input
-          type="text"
-          disabled={newdis}
-          class="border-red-200 bottom-2"
-          placeholder="hello"
-        ></input>
-        <button
-          onClick={() => {
-            setNewdis(true);
-          }}
-        >
-          Disable
-        </button>
       </div>
 
       <div>
@@ -838,9 +716,6 @@ console.log(event)
                       </div>
                     </td>
                   ))}
-
-                {/* <button class="bg-red-400 w-16 rounded-full text-white" onClicl={handleedit}> Edit</button>
-                                <button class="bg-red-600 w-16 rounded-full text-white">Delete</button> */}
 
                 <td className=" ">
                   {item &&
